@@ -1,16 +1,24 @@
+"use client"
 import React from "react"
 import { useState } from "react"
+import Link from "next/link"
+import { signIn } from "next-auth/react"
+import "../../globals.css"
+import { useRouter } from "next/navigation"
 
-function NormalSignUpComponent() {
+function NormalLoginComponent() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
-    name: "",
-    username: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
-  const handleChange = (e) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [error, setError] = useState(null);
+
+  function handleChange(e) {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -18,39 +26,40 @@ function NormalSignUpComponent() {
     });
   };
 
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleSubmit = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
-    // Add your backend logic here to handle form submission
-    console.log("Form submitted:", formData);
+    const signInData = await signIn('credentials', {
+      email: formData.email,
+      password: formData.password,
+      redirect: false
+    })
+
+    if (signInData.status === 401) {
+      setError("*Credentials are Wrong")
+    } else if (signInData.status === 200) {
+      router.push("/dashboard")
+    }
   };
 
-  const handleTogglePassword = () => {
+  function handleTogglePassword () {
     setShowPassword(!showPassword);
   };
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6 text-9ADE7B gap-y-4">Sign Up</h1>
+      <h1 className="text-3xl font-bold mb-4 text-9ADE7B gap-y-4">Login</h1>
 
+      {error && (
+        <p className="text-red-600 mb-4">{error}</p>
+      )}
+      
       <form onSubmit={handleSubmit}>
-      <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          required
-          value={formData.name}
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded break-after-column mb-4"
-        />
-
         <input
-          type="text"
-          name="username"
-          placeholder="Username"
+          type="email"
+          name="email"
+          placeholder="Email"
           required
-          value={formData.username}
+          value={formData.email}
           onChange={handleChange}
           className="w-full p-2 border border-gray-300 rounded break-after-column mb-4"
         />
@@ -84,33 +93,21 @@ function NormalSignUpComponent() {
           </button>
         </div>
 
-        <div className="relative mb-4">
-          <input
-            type="password"
-            name="confirmPassword"
-            required
-            placeholder="Confirm Password"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-
         <button
           type="submit"
           className="w-full text-white bg-EEF296 py-2 px-4 rounded bg-neededBlue hover:bg-neededPurple"
         >
-          Sign Up
+          Login
         </button>
 
       </form>
 
       <p className="mt-4">
-        Alreaady have an Account? <a href="/login" className="text-needBlue">Login</a>
+        Don't have an Account? <Link href="/signup" className="text-neededBlue">Sign Up</Link>
       </p>
 
     </div>
   );
 }
 
-export default NormalSignUpComponent;
+export default NormalLoginComponent;

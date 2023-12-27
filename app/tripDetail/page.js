@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-import Modal from "@mui/material/Modal";
-import "react-datepicker/dist/react-datepicker.css";
-import "../styles.css";
+import React, { useState } from "react"
+import DatePicker from "react-datepicker"
+import Modal from "@mui/material/Modal"
+import "react-datepicker/dist/react-datepicker.css"
+import "../globals.css"
 
-const TripPage = () => {
+export default function TripPage () {
   const [expenses, setExpenses] = useState([]);
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [amount, setAmount] = useState(0);
@@ -17,7 +17,6 @@ const TripPage = () => {
   const friends = [
     { id: 1, name: "Friend1" },
     { id: 2, name: "Friend2" },
-    // Add more friends as needed
   ];
 
   return (
@@ -97,4 +96,3 @@ const TripPage = () => {
   );
 };
 
-export default TripPage;

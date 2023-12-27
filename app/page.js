@@ -1,5 +1,6 @@
 import React from "react"
 import "./globals.css"
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -24,13 +25,13 @@ export default function Home() {
         </div>
 
         <div>
-          <a href="/signup"><button className="w-2/3 mb-4 sm:w-1/3 sm:mr-6 text-white bg-EEF296 py-2 px-4 rounded bg-neededBlue hover:bg-neededPurple">
+          <Link href="/signup"><button className="w-2/3 mb-4 sm:w-1/3 sm:mr-6 text-white bg-EEF296 py-2 px-4 rounded bg-neededBlue hover:bg-neededPurple">
             Sign Up
-          </button></a>
+          </button></Link>
 
-          <a href="/login"><button className="w-2/3 sm:w-1/3 text-white bg-EEF296 py-2 px-4 rounded bg-neededBlue hover:bg-neededPurple">
+          <Link href="/login"><button className="w-2/3 sm:w-1/3 text-white bg-EEF296 py-2 px-4 rounded bg-neededBlue hover:bg-neededPurple">
             Login
-          </button></a>
+          </button></Link>
         </div>
       </div>
     </div>

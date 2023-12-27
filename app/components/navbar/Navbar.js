@@ -1,13 +1,38 @@
 "use client"
-import React, { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useSession } from "next-auth/react"
+import axios from "axios"
 
-const Navbar = () => {
+export default function Navbar() {
+  const { data: session } = useSession({
+    required: true,
+  });
+
+  const userEmail = session?.user?.email;
+  // console.log(userID);
+  const [avatar, setAvatar] = useState(null);
+
   const links = [
-    { label: "Friends", href: "/friends" },
-    { label: "Trips", href: "/trips" },
+    { label: "Friends", href: "/dashboard/friends" },
+    { label: "Trips", href: "/dashboard/trips" },
   ];
+
+  useEffect (() => {
+    async function getAvatar() {
+      try {
+
+        const response = (await axios.post("/api/avatar"));
+        setAvatar(response.data.avatar)
+
+      } catch (err) { 
+        console.log("Error getting avatar");
+      }
+    };
+    
+    getAvatar();
+  }, [])
 
   const [isMenuOpen, setMenuOpen] = useState(false);
 
@@ -15,20 +40,6 @@ const Navbar = () => {
 
   function handleToggleMenu() {
     setMenuOpen(!isMenuOpen);
-  }
-
-  const [friendsSection, setFriendsSection] = useState(true);
-
-  function handleFriendsSection() {
-    setFriendsSection(true);
-    setTripsSection(false);
-  }
-
-  const [tripsSection, setTripsSection] = useState(false);
-
-  function handleTripsSection() {
-    setTripsSection(true);
-    setFriendsSection(false);
   }
 
   const shouldShowElement = window.innerWidth >= 640;
@@ -51,7 +62,7 @@ const Navbar = () => {
         <Link href="/">
           <div className="items-center space-x-4 ml-5 flex">
             {shouldShowElement && (
-              <img src="logo.png" alt="Logo" className="h-8 w-8" />
+              <img src="/homepage.png" alt="Logo" className="h-8 w-8 rounded-full" />
             )}
 
             <span className="text-white text-xl font-bold">SplitHaven</span>
@@ -60,13 +71,16 @@ const Navbar = () => {
 
         {/* Profile */}
         <div className="flex items-center space-x-4 ml-auto">
-          <div className="relative">
-            <img src="" alt="Profile" className="h-8 w-8 rounded-full" />
-          </div>
-
-          {shouldShowElement && (
-            <span className="text-white hidden sm:block">Username</span>
-          )}
+          <Link href="/dashboard">
+            <div className="relative">
+              <img src={`/avatar-${avatar}.jpg`} alt="Profile" className="h-8 w-8 rounded-full" />
+            </div>
+          </Link>
+          <Link href="/dashboard">
+            {shouldShowElement && (
+              <span className="text-white hidden sm:block">{userEmail?.slice(0, userEmail.lastIndexOf("@"))}</span>
+            )}
+          </Link>
         </div>
 
         {/* Responsive Menu */}
@@ -78,8 +92,7 @@ const Navbar = () => {
                 <Link
                   key={link.href}
                   className={`${link.href === currentPath ? "bg-neededCyan text-black" : "text-white"} m-4 rounded-lg block py-2 font-bold text-xl mt-4 hover:bg-neededCyan hover:text-black`}
-                  href={link.href} 
-                  onClick={handleFriendsSection}
+                  href={link.href}
                 >
                   {link.label}
                 </Link>
@@ -91,5 +104,3 @@ const Navbar = () => {
     </nav>
   );
 };
-
-export default Navbar;

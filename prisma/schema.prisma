@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id                                                      Int                   @id @default(autoincrement())
+  name                                                    String                @db.VarChar(45)
+  email                                                   String                @unique(map: "unique_email") @db.VarChar(45)
+  password                                                String
+  avatar                                                  Int                   @default(0)
+  friend_transactions_friend_transactions_payee_idTousers friend_transactions[] @relation("friend_transactions_payee_idTousers")
+  friend_transactions_friend_transactions_payer_idTousers friend_transactions[] @relation("friend_transactions_payer_idTousers")
+  friends_friends_user_id1Tousers                         friends[]             @relation("friends_user_id1Tousers")
+  friends_friends_user_id2Tousers                         friends[]             @relation("friends_user_id2Tousers")
+  trip_transactions_trip_transactions_payee_idTousers     trip_transactions[]   @relation("trip_transactions_payee_idTousers")
+  trip_transactions_trip_transactions_payer_idTousers     trip_transactions[]   @relation("trip_transactions_payer_idTousers")
+  user_trips                                              user_trips[]
+}
+
+model friends {
+  id                            Int    @id @default(autoincrement())
+  user_id1                      Int?
+  user_id2                      Int?
+  users_friends_user_id1Tousers users? @relation("friends_user_id1Tousers", fields: [user_id1], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users_friends_user_id2Tousers users? @relation("friends_user_id2Tousers", fields: [user_id2], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([user_id1, user_id2], map: "unique_friendship")
+}
+
+model trips {
+  id                Int                 @id @default(autoincrement())
+  name              String              @db.VarChar(100)
+  start_date        DateTime            @default(now()) @db.Timestamp(6)
+  trip_transactions trip_transactions[]
+  user_trips        user_trips[]
+}
+
+model user_trips {
+  user_id Int
+  trip_id Int
+  trips   trips @relation(fields: [trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users   users @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([user_id, trip_id])
+}
+
+model friend_transactions {
+  id                                        Int      @id @default(autoincrement())
+  payer_id                                  Int?
+  payee_id                                  Int?
+  amount                                    Decimal? @db.Decimal(10, 2)
+  description                               String?
+  time                                      DateTime @default(now()) @db.Timestamp(6)
+  users_friend_transactions_payee_idTousers users?   @relation("friend_transactions_payee_idTousers", fields: [payee_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users_friend_transactions_payer_idTousers users?   @relation("friend_transactions_payer_idTousers", fields: [payer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model trip_transactions {
+  id                                      Int      @id(map: "transactions_pkey") @default(autoincrement())
+  trip_id                                 Int?
+  payer_id                                Int?
+  payee_id                                Int?
+  amount                                  Decimal? @db.Decimal(10, 2)
+  description                             String?
+  time                                    DateTime @default(now()) @db.Timestamp(6)
+  users_trip_transactions_payee_idTousers users?   @relation("trip_transactions_payee_idTousers", fields: [payee_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "transactions_payee_id_fkey")
+  users_trip_transactions_payer_idTousers users?   @relation("trip_transactions_payer_idTousers", fields: [payer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "transactions_payer_id_fkey")
+  trips                                   trips?   @relation(fields: [trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "transactions_trip_id_fkey")
+}
