@@ -1,5 +1,5 @@
 "use client"
-import React from "react"
+import React, { useEffect } from "react"
 import { useState } from "react"
 import Link from "next/link"
 import axios from "axios"
@@ -17,6 +17,8 @@ function NormalSignUpComponent() {
   const [showPassword, setShowPassword] = useState(false);
 
   const [error, setError] = useState(null);
+  
+  const [passwordError, setPasswordError] = useState(null);
 
   const router = useRouter();
 
@@ -37,8 +39,6 @@ function NormalSignUpComponent() {
     if (formData.password === formData.confirmPassword) {
       const response = await axios.post("/api/signup", formData);
       await handleRouting(response);
-    } else {
-      setError("*Both the passwords do not match");
     }
   };
 
@@ -54,12 +54,23 @@ function NormalSignUpComponent() {
     }
   }
 
+  useEffect(() => {
+    if (formData.password != formData.confirmPassword) {
+      setPasswordError("Both the passwords don't match");
+    } else {
+      setPasswordError(null)
+    }
+  })
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-4 text-9ADE7B gap-y-4">Sign Up</h1>
 
       {error && (
         <p className="text-red-600 mb-4">{error}</p>
+      )}
+      {passwordError && (
+        <p className="text-red-600 mb-4">{passwordError}</p>
       )}
 
       <form onSubmit={handleSubmit}>
@@ -126,6 +137,7 @@ function NormalSignUpComponent() {
 
         <button
           type="submit"
+          disabled={!!passwordError}
           className="w-full text-white bg-EEF296 py-2 px-4 rounded bg-neededBlue hover:bg-neededPurple"
         >
           Sign Up

@@ -11,8 +11,8 @@ export default function Navbar() {
   });
 
   const userEmail = session?.user?.email;
-  // console.log(userID);
   const [avatar, setAvatar] = useState(null);
+  let shouldShowElement;
 
   const links = [
     { label: "Friends", href: "/dashboard/friends" },
@@ -27,12 +27,18 @@ export default function Navbar() {
         setAvatar(response.data.avatar)
 
       } catch (err) { 
-        console.log("Error getting avatar");
+        console.log("Error getting avatar for navbar");
       }
     };
     
     getAvatar();
-  }, [])
+  }, []);
+
+  useEffect(() => {
+
+    shouldShowElement = window.innerWidth >= 640;
+
+  }, [window.innerWidth]);
 
   const [isMenuOpen, setMenuOpen] = useState(false);
 
@@ -41,8 +47,6 @@ export default function Navbar() {
   function handleToggleMenu() {
     setMenuOpen(!isMenuOpen);
   }
-
-  const shouldShowElement = window.innerWidth >= 640;
 
   return (
     <nav className="bg-neededPurple p-4">

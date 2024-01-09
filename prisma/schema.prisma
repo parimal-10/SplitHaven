@@ -13,6 +13,8 @@ model users {
   email                                                   String                @unique(map: "unique_email") @db.VarChar(45)
   password                                                String
   avatar                                                  Int                   @default(0)
+  friend_requests_friend_requests_recieveTousers          friend_requests[]     @relation("friend_requests_recieveTousers")
+  friend_requests_friend_requests_sendTousers             friend_requests[]     @relation("friend_requests_sendTousers")
   friend_transactions_friend_transactions_payee_idTousers friend_transactions[] @relation("friend_transactions_payee_idTousers")
   friend_transactions_friend_transactions_payer_idTousers friend_transactions[] @relation("friend_transactions_payer_idTousers")
   friends_friends_user_id1Tousers                         friends[]             @relation("friends_user_id1Tousers")
@@ -71,4 +73,14 @@ model trip_transactions {
   users_trip_transactions_payee_idTousers users?   @relation("trip_transactions_payee_idTousers", fields: [payee_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "transactions_payee_id_fkey")
   users_trip_transactions_payer_idTousers users?   @relation("trip_transactions_payer_idTousers", fields: [payer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "transactions_payer_id_fkey")
   trips                                   trips?   @relation(fields: [trip_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "transactions_trip_id_fkey")
+}
+
+model friend_requests {
+  id                                   Int    @id @default(autoincrement())
+  send                                 Int?
+  recieve                              Int?
+  users_friend_requests_recieveTousers users? @relation("friend_requests_recieveTousers", fields: [recieve], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users_friend_requests_sendTousers    users? @relation("friend_requests_sendTousers", fields: [send], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([send, recieve])
 }

@@ -4,14 +4,29 @@ import { Modal } from "@mui/material"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import "../../globals.css"
+import axios from "axios"
 
 export default function FriendCard({ friend }) {
   const username = friend.email.slice(0, friend.email.lastIndexOf("@"));
   const transactions = friend.transactions;
   const userID = friend.userID;
+  const friendID = friend.id;
 
   const [open, setOpen] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
+
+  const [formData, setFormData] = useState({
+    amount: "",
+    description: ""
+  })
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   function handleOpen() {
     setOpen(true);
@@ -19,6 +34,17 @@ export default function FriendCard({ friend }) {
 
   function handleClose() {
     setOpen(false);
+  }
+
+  async function addExpense() {
+    try {
+
+      const response = await axios.post("/api/dashboard/friends/addExpense", { formData, startDate, userID, friendID });
+      console.log(response);
+
+    } catch (err) {
+      console.log("Error adding expense", err);
+    }
   }
 
   return (
@@ -39,7 +65,7 @@ export default function FriendCard({ friend }) {
             <span className="text-green-600">{`+ ₹${friend.balance}`}</span>
           )}
           {friend.balance < 0 && (
-            <span className="text-red-600">{`- ₹${friend.balance}`}</span>
+            <span className="text-red-600">{`- ₹${Math.abs(friend.balance)}`}</span>
           )}
         </div>
 
@@ -66,24 +92,30 @@ export default function FriendCard({ friend }) {
               <input
                 type="number"
                 placeholder="*Amount"
+                name="amount"
                 required
-                className="ml-4 remove-arrow outline-none w-full" // Updated classes
+                value={formData.amount}
+                onChange={handleChange}
+                className="ml-4 remove-arrow outline-none w-full"
                 min={1}
                 width={100}
               />
             </div>
 
-            <DatePicker showIcon withPortal selected={startDate} onChange={(date) => setStartDate(date)} className="mb-4" />
+            <DatePicker showIcon withPortal required selected={startDate} onChange={(date) => setStartDate(date)} className="mb-4" />
 
             <input
               type="text"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
               placeholder="Description"
               className="p-2 border border-gray-300 rounded mr-2 w-full outline-none mb-4"
             />
 
             <button
               type="button"
-              // onClick={handleAddExpense} 
+              onClick={addExpense}
               className="bg-neededBlue text-white py-2 px-4 rounded hover:bg-neededPurple"
             >
               Add
@@ -110,7 +142,7 @@ export default function FriendCard({ friend }) {
                     )}
                   </div>
                 ))}
-              </ul> 
+              </ul>
             )}
           </div>
         </div>

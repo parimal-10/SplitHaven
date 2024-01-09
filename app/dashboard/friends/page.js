@@ -3,15 +3,32 @@ import FriendCard from "../../components/dashboard/FriendCard"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/lib/auth"
 import { PrismaClient } from "@prisma/client"
+import { cookies } from "next/headers"
+import axios from "axios"
+import SearchUser from "@/app/components/dashboard/SearchUser"
 
 export default async function Friends() {
   const session = await getServerSession(authOptions);
+  const userID = session?.user?.id;
+
+  // const sessionToken = cookies()?.get("next-auth.session-token")?.value;
+  // console.log(sessionToken);
+
+  // try {
+  //   const response = await axios.post("/api/dashboard/friends", null, {
+  //     headers: {
+  //       Authorization: `Bearer ${sessionToken}`
+  //     }
+  //   })
+  //   console.log(response);
+  // } catch (err) {
+  //   console.log("Error sending post request", err);
+  // }
 
   const prisma = new PrismaClient();
   const friendsData = [];
   
   try {
-    const userID = session?.user?.id;
 
     const friends = await prisma.friends.findMany({
       where: {
@@ -96,8 +113,9 @@ export default async function Friends() {
   }
 
   return (
-    <div className="container mx-auto mt-8 max-[640px]:flex max-[640px]:justify-center">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-center">
+    <div className="container mx-auto mt-8 flex flex-col max-[640px]:flex max-[640px]:justify-center">
+      <SearchUser userID={userID} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-center justify-center mt-4">
         {friendsData.map((friend) => (
           <FriendCard key={friend.id} friend={friend} />
         ))}

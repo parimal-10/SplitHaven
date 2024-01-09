@@ -19,13 +19,12 @@ export async function POST(req) {
         })
 
         const {password: newUserPassword, avatar: avatar, ...rest } = newUser;
-
-        await prisma.$disconnect();
         return NextResponse.json(rest, {status: 201});
 
     } catch (err) {
-        await prisma.$disconnect();
         console.log("Sending duplicate email error");
         return NextResponse.json({error: "*Email already exists"}, {status: 202});
+    } finally {
+        await prisma.$disconnect();
     }
 }
