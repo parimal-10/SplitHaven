@@ -1,4 +1,4 @@
-import FriendCard from "@/app/components/dashboard/FriendCard";
+import FriendCard from "@/app/components/dashboard/friends/FriendCard";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 

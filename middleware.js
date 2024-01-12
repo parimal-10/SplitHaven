@@ -16,7 +16,7 @@ async function middleware(request) {
 
   const url_login = request.nextUrl.clone();
   url_login.pathname = "/login";
-  
+
   const url_dashboard = request.nextUrl.clone();
   url_dashboard.pathname = "/dashboard";
 
@@ -35,5 +35,5 @@ async function middleware(request) {
 export default middleware;
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/dashboard/:path*", "/api/:path*"]
 };

@@ -1,8 +1,10 @@
 import React from "react"
-import TripCard from "../../components/dashboard/TripCard.js"
+import TripCard from "../../components/dashboard/trips/TripCard.js"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/lib/auth"
 import { PrismaClient } from "@prisma/client"
+import CreateTrip from "@/app/components/dashboard/trips/CreateTrip.js"
+import "../../globals.css"
 
 export default async function Friends() {
   const session = await getServerSession(authOptions);
@@ -73,6 +75,7 @@ export default async function Friends() {
 
   return (
     <div className="container mx-auto mt-8 max-[640px]:flex max-[640px]:justify-center">
+      <CreateTrip userID={userID} />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-center">
         {tripsData.map((trip) => (
           <TripCard key={trip.trip_id} trip={trip} userID={userID}/>

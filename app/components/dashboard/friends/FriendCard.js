@@ -3,13 +3,11 @@ import React, { useState } from "react"
 import { Modal } from "@mui/material"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
-import "../../globals.css"
 import axios from "axios"
 
-export default function FriendCard({ friend }) {
+export default function FriendCard({ userID, friend }) {
   const username = friend.email.slice(0, friend.email.lastIndexOf("@"));
   const transactions = friend.transactions;
-  const userID = friend.userID;
   const friendID = friend.id;
 
   const [open, setOpen] = useState(false);

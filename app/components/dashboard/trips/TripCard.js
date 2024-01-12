@@ -3,7 +3,6 @@ import React, { useState } from "react"
 import DatePicker from "react-datepicker"
 import Modal from "@mui/material/Modal"
 import "react-datepicker/dist/react-datepicker.css"
-import "../../globals.css"
 import axios from "axios"
 
 export default function TripPage({ trip, userID }) {

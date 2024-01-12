@@ -6,23 +6,17 @@ export async function POST(request) {
 
     try {
 
-        const {requestID, userID, friendID} = await request.json();
-
-        await prisma.friends.create({
+        const {userID, friendID} = await request.json();
+        
+        await prisma.friend_requests.create({
             data: {
-                user_id1: userID,
-                user_id2: friendID
-            }
-        });
-
-        await prisma.friend_requests.delete({
-            where: {
-                id: requestID
+                send: userID,
+                recieve: friendID
             }
         });
 
         return NextResponse.json({status: 201});
-         
+
     } catch (err) {
         console.log("Error adding friend");
         return NextResponse.json({status: 401});

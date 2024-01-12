@@ -1,11 +1,13 @@
 import React from "react"
-import FriendCard from "../../components/dashboard/FriendCard"
+import FriendCard from "../../components/dashboard/friends/FriendCard"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/lib/auth"
 import { PrismaClient } from "@prisma/client"
 import { cookies } from "next/headers"
 import axios from "axios"
-import SearchUser from "@/app/components/dashboard/SearchUser"
+import SearchUser from "@/app/components/dashboard/friends/SearchUser"
+import FriendRequest from "@/app/components/dashboard/friends/FriendRequest"
+import "../../globals.css"
 
 export default async function Friends() {
   const session = await getServerSession(authOptions);
@@ -27,7 +29,7 @@ export default async function Friends() {
 
   const prisma = new PrismaClient();
   const friendsData = [];
-  
+
   try {
 
     const friends = await prisma.friends.findMany({
@@ -92,11 +94,10 @@ export default async function Friends() {
           } else {
             balance -= Number(transaction.amount);
           }
-        }); 
+        });
 
         const combinedFriend = {
           ...friendData,
-          userID: userID,
           balance: balance,
           transactions: friendTransactions
         };
@@ -107,17 +108,23 @@ export default async function Friends() {
       console.log("error getting extra details of friends");
     }
 
-    await prisma.$disconnect();
   } catch (err) {
     console.log("error getting friends", err);
+  } finally {
+    await prisma.$disconnect();
   }
 
   return (
     <div className="container mx-auto mt-8 flex flex-col max-[640px]:flex max-[640px]:justify-center">
-      <SearchUser userID={userID} />
+
+      <div className="flex justify-between">
+        <SearchUser userID={userID} />
+        <FriendRequest userID={userID} />
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-center justify-center mt-4">
         {friendsData.map((friend) => (
-          <FriendCard key={friend.id} friend={friend} />
+          <FriendCard key={friend.id} userID={userID} friend={friend} />
         ))}
       </div>
     </div>

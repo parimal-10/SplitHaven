@@ -97,6 +97,7 @@ export default function Navbar() {
                   key={link.href}
                   className={`${link.href === currentPath ? "bg-neededCyan text-black" : "text-white"} m-4 rounded-lg block py-2 font-bold text-xl mt-4 hover:bg-neededCyan hover:text-black`}
                   href={link.href}
+                  onClick={handleToggleMenu}
                 >
                   {link.label}
                 </Link>
