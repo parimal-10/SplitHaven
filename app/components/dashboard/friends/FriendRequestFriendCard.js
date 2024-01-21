@@ -3,7 +3,7 @@ import React, { useState } from "react"
 import axios from "axios"
 import User from "../../user/User";
 
-export default function FriendRequestFriendCard({ friend, userID }) {
+export default function FriendRequestFriendCard({ userID, friend }) {
     const [added, setAdded] = useState(false);
 
     async function addFriend(requestID, friendID) {

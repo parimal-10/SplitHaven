@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react"
 import { Modal } from "@mui/material"
 import FriendRequestFriendCard from "./FriendRequestFriendCard"
 
-export default function ({ userID }) {
+export default function FriendRequest({ userID }) {
     const [friendRequests, setFriendRequests] = useState(null);
     const [open, setOpen] = useState(false);
 
@@ -63,7 +63,7 @@ export default function ({ userID }) {
                     {friendRequests && friendRequests.length > 0 ? (
                         <div>
                             {friendRequests.map((friend) => (
-                                <FriendRequestFriendCard userID={userID} friend={friend} />
+                                <FriendRequestFriendCard key={friend.id} userID={userID} friend={friend} />
                             ))
                             }
                         </div>

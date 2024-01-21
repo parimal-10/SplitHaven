@@ -56,7 +56,7 @@ export default function SearchUser({ userID }) {
                     {users.length > 0 ? (
                         <div>
                             {users.map((user) => (
-                                <SearchUserCard userID={userID} user={user} label={label} pathname={pathname}/>
+                                <SearchUserCard key={user.id} userID={userID} user={user} label={label} pathname={pathname}/>
                             ))}
                         </div>
                     ) : searchQuery && searchQuery.length > 3 ? (

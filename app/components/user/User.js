@@ -1,6 +1,6 @@
 import React from "react"
 
-export default function User({avatar, email, name}) {
+export default function User({key, avatar, email, name}) {
     const username = email.slice(0, email.lastIndexOf("@"));
 
     return (

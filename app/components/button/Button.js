@@ -3,7 +3,7 @@ import React, {useState} from "react"
 import { useSearchParams } from "next/navigation"
 import axios from "axios"
 
-export default function Button({ userID, friendID, already, label, pathname }) {
+export default function Button({ key, userID, friendID, already, label, pathname }) {
     const [sent, setSent] = useState(false);
     const searchParams = useSearchParams();
 

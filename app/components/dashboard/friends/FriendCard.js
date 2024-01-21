@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import axios from "axios"
 import User from "../../user/User"
 
-export default function FriendCard({ userID, friend }) {
+export default function FriendCard({ key, userID, friend }) {
   const username = friend.email.slice(0, friend.email.lastIndexOf("@"));
   const transactions = friend.transactions;
   const friendID = friend.id;

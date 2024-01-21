@@ -31,9 +31,9 @@ export default function AddToTrip() {
                 <div
                     className="bg-neededCyan p-4 shadow-md rounded-md mb-4 flex items-center max-w-sm min-w-fit gap-2"
                 >
-                    <User avatar={friend.avatar} email={friend.email} name={friend.name} />
+                    <User key={friend.id} avatar={friend.avatar} email={friend.email} name={friend.name} />
                     
-                    <Button userID={userID} friendID={friend.id} already={friend.already} label={label} pathname={pathname}/>
+                    <Button key={friend.id} userID={userID} friendID={friend.id} already={friend.already} label={label} pathname={pathname}/>
                 </div>
             ))}
         </div>

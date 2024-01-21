@@ -28,7 +28,7 @@ function NormalLoginComponent() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const signInData = await signIn('credentials', {
+    const signInData = await signIn("credentials", {
       email: formData.email,
       password: formData.password,
       redirect: false
