@@ -155,7 +155,7 @@ export default function TripPage({ trip, userID }) {
               <ul>
 
                 {transactions.map((transaction) => (
-                  <div className="flex gap-2">
+                  <div key={transaction.id} className="flex gap-2">
 
                     <h2>{transaction?.time.toString().slice(0, 10)}</h2>
 
