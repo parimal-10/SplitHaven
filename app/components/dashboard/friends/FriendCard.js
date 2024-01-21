@@ -134,7 +134,7 @@ export default function FriendCard({ key, userID, friend }) {
             ) : (
               <ul>
                 {transactions.map((transaction) => (
-                  <div className="flex gap-2">
+                  <div key={transaction.id} className="flex gap-2">
                     <h2>{transaction?.time.toString().slice(0, 11)}</h2>
                     <h3>{transaction.description}</h3>
                     {transaction.payer_id === userID && (

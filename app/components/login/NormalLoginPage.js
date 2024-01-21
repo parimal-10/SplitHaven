@@ -103,7 +103,7 @@ function NormalLoginComponent() {
       </form>
 
       <p className="mt-4">
-        Don't have an Account? <Link href="/signup" className="text-neededBlue">Sign Up</Link>
+        Dont have an Account? <Link href="/signup" className="text-neededBlue">Sign Up</Link>
       </p>
 
     </div>
