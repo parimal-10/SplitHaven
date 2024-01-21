@@ -113,7 +113,7 @@ export default function TripPage({ trip, userID }) {
 
                 {friends.map((friend) => (
                   friend.user_id !== userID && (
-                    <div className="flex mb-2 w-full items-center">
+                    <div key={friend.user_id} className="flex mb-2 w-full items-center">
 
                       <h2>
                         {friend.users.email.slice(0, friend.users.email.lastIndexOf("@"))} ({friend.users.name})

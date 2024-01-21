@@ -30,6 +30,7 @@ export default function AddToTrip() {
             {Array.isArray(friends) && friends.map(friend => (
                 <div
                     className="bg-neededCyan p-4 shadow-md rounded-md mb-4 flex items-center max-w-sm min-w-fit gap-2"
+                    key={friend.id}
                 >
                     <User key={friend.id} avatar={friend.avatar} email={friend.email} name={friend.name} />
                     

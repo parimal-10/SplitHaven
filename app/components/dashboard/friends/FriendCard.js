@@ -59,7 +59,7 @@ export default function FriendCard({ key, userID, friend }) {
         onClick={handleOpen}
       >
 
-        <User avatar={friend.avatar} email={friend.email} name={friend.name} />
+        <User key={friend.id} avatar={friend.avatar} email={friend.email} name={friend.name} />
 
         <div className="ml-auto">
           {friend.balance > 0 && (
