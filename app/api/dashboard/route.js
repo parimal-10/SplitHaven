@@ -6,10 +6,10 @@ import { NextResponse } from "next/server"
 export async function POST() {
     const session = await getServerSession(authOptions);
     const userID = session?.user?.id;
+    const prisma = new PrismaClient();
 
     try {
-        const prisma = new PrismaClient();
-
+        
         const userData = await prisma.users.findUnique({
             where: {
                 id: userID
