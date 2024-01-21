@@ -62,7 +62,7 @@ export async function POST(request) {
                     })
 
                 } catch (err) {
-                    console.log("error getting transaction of friend", err);
+                    console.log("Error getting transaction of friend", err);
                 }
 
                 friendTransactions.forEach(transaction => {
@@ -82,7 +82,7 @@ export async function POST(request) {
                 friendsData.push(combinedFriend);
             }
         } catch (err) {
-            console.log("error getting extra details of friends");
+            console.log("Error getting extra details of friends", err);
         }
 
     } catch (err) {

@@ -1,6 +1,5 @@
-import FriendCard from "@/app/components/dashboard/friends/FriendCard";
-import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client"
+import { NextResponse } from "next/server"
 
 export async function POST(request) {
     const prisma = new PrismaClient();
@@ -8,7 +7,6 @@ export async function POST(request) {
     try{
 
         const {tripID, userID, description, startDate, data} = await request.json();
-        console.log(tripID, userID, description, startDate, data);
 
         for (const [friendId, amount] of Object.entries(data)) {
             await prisma.trip_transactions.create({
@@ -23,12 +21,12 @@ export async function POST(request) {
             });
         }
 
-        return NextResponse.json({staus: 201});
+        return NextResponse.json({status: 201});
 
     } catch (err) {
-        console.log("Error adding expends in trip");
+        console.log("Error adding expends in trip", err);
         return NextResponse.json({status: 401})
     } finally {
-        prisma.$disconnect();
+        await prisma.$disconnect();
     }
 }

@@ -1,9 +1,9 @@
-import { authOptions } from "@/app/lib/auth";
+import { authOptions } from "@/app/lib/auth"
 import { PrismaClient } from "@prisma/client"
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth"
+import { NextResponse } from "next/server"
 
-export async function POST(request) {
+export async function POST() {
 
     const prisma = new PrismaClient();
 
@@ -21,11 +21,12 @@ export async function POST(request) {
             }
         });
 
-        prisma.$disconnect();
         return NextResponse.json(avatar, { status: 201 });
 
     } catch (err) {
-        prisma.$disconnect();
-        return NextResponse.json({ status: 400 });
+        console.log("Error getting the details in navbar", err);
+        return NextResponse.json({ status: 401 });
+    } finally {
+        await prisma.$disconnect();
     }
 }

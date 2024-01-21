@@ -1,9 +1,9 @@
-import { authOptions } from "@/app/lib/auth";
-import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { authOptions } from "@/app/lib/auth"
+import { PrismaClient } from "@prisma/client"
+import { getServerSession } from "next-auth"
+import { NextResponse } from "next/server"
 
-export async function POST(request) {
+export async function POST() {
     const session = await getServerSession(authOptions);
     const userID = session?.user?.id;
 
@@ -22,11 +22,11 @@ export async function POST(request) {
             }
         })
 
-        prisma.$disconnect();
-
         return NextResponse.json(userData, { status: 201 });
-    } catch (error) {
-        console.error("Error processing request:", error);
-        return NextResponse.json({ error: "Invalid request" }, { status: 202 });
+    } catch (err) {
+        console.error("Error processing request:", err);
+        return NextResponse.json({ error: "Invalid request" }, { status: 401 });
+    } finally {
+        await prisma.$disconnect();
     }
 }

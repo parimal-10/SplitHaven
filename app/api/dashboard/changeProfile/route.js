@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import { hash } from "bcrypt";
+import { PrismaClient } from "@prisma/client"
+import { hash } from "bcrypt"
 import { NextResponse } from "next/server"
 
 export async function POST(request) {
@@ -40,7 +40,7 @@ export async function POST(request) {
         return NextResponse.json({ status: 201 });
 
     } catch (err) {
-        return NextResponse.json({ status: 400 });
+        return NextResponse.json({ status: 401 });
     } finally {
         await prisma.$disconnect();
     }

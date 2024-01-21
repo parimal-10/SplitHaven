@@ -18,9 +18,9 @@ export async function POST(request) {
         return NextResponse.json({status: 201});
 
     } catch (err) {
-        console.log("Error adding friend");
+        console.log("Error adding friend", err);
         return NextResponse.json({status: 401});
     } finally {
-        prisma.$disconnect();
+        await prisma.$disconnect();
     }
 }

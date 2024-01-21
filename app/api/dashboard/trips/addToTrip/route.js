@@ -21,6 +21,6 @@ export async function POST(request) {
         console.log("Error adding friend to the trip");
         return NextResponse.json({status: 401});
     } finally {
-        prisma.$disconnect();
+        await prisma.$disconnect();
     }
 }

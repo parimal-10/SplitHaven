@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client"
+import { NextResponse } from "next/server"
 
 export async function POST(request) {
     const prisma = new PrismaClient();
@@ -31,11 +31,11 @@ export async function POST(request) {
 
     } catch (err) {
 
-        console.log("Error adding the transaction to the database");
+        console.log("Error adding the transaction to the database", err);
         return NextResponse.json({status: 401})
 
     } finally {
-        prisma.$disconnect();
+        await prisma.$disconnect();
     }
     
 }

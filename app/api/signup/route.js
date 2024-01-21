@@ -2,11 +2,11 @@ import { NextResponse } from "next/server"
 import { hash } from "bcrypt"
 import { PrismaClient } from "@prisma/client"
 
-export async function POST(req) {
+export async function POST(request) {
     const prisma = new PrismaClient();  
 
     try {
-        const body = await req.json();
+        const body = await request.json();
 
         const hashedPassword = await hash(body.password, 10);
 
@@ -22,7 +22,7 @@ export async function POST(req) {
         return NextResponse.json(rest, {status: 201});
 
     } catch (err) {
-        console.log("Sending duplicate email error");
+        console.log("Sending duplicate email error", err);
         return NextResponse.json({error: "*Email already exists"}, {status: 202});
     } finally {
         await prisma.$disconnect();

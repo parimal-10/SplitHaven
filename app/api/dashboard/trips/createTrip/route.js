@@ -36,6 +36,6 @@ export async function POST(request) {
         console.log("Error creating trip", err);
         return NextResponse.json({status: 401});
     } finally {
-        prisma.$disconnect();
+        await prisma.$disconnect();
     }
 }

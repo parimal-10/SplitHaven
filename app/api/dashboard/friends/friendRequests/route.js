@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client"
+import { NextResponse } from "next/server"
 
 export async function POST(request) {
     const prisma = new PrismaClient();
@@ -28,11 +28,9 @@ export async function POST(request) {
         return NextResponse.json(requests, {status: 201});
 
     } catch (err) {
-        console.log("Error getting friend requests");
+        console.log("Error getting friend requests", err);
         return NextResponse.json({status: 401});
     } finally {
-        prisma.$disconnect();
+        await prisma.$disconnect();
     }
-
-    const {userID} = request.json();
 }

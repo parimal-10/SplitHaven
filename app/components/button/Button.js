@@ -26,7 +26,7 @@ export default function Button({ userID, friendID, already, label, pathname }) {
             setSent(true);
 
         } catch (err) {
-            console.log("Error adding to the trip");
+            console.log("Error adding to the trip", err);
         }
     }
 

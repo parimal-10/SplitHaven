@@ -77,6 +77,6 @@ export async function POST(request) {
         console.log("Error getting friends", err);
         return NextResponse.json({ status: 401 });
     } finally {
-        prisma.$disconnect();
+        await prisma.$disconnect();
     }
 }
