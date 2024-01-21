@@ -1,14 +1,9 @@
 import { NextResponse } from "next/server"
-import { getSession } from "next-auth/react"
+import { getToken } from "next-auth/jwt"
 
 async function middleware(request) {
-  const requestForNextAuth = {
-    headers: {
-      cookie: request.headers.get("cookie"),
-    },
-  };
-
-  const session = await getSession({ req: requestForNextAuth });
+  const token = await getToken({req: request});
+  const isAuthenticated = !!token;
 
   const isAuthPage =
     request.nextUrl.pathname.startsWith("/login") ||
@@ -20,7 +15,7 @@ async function middleware(request) {
   const url_dashboard = request.nextUrl.clone();
   url_dashboard.pathname = "/dashboard";
 
-  if (!session) {
+  if (!isAuthenticated) {
     let from = request.nextUrl.pathname;
     if (request.nextUrl.search) {
       from += request.nextUrl.search;
@@ -35,5 +30,5 @@ async function middleware(request) {
 export default middleware;
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/api/:path*"]
+  matcher: ["/dashboard/:path*"]
 };

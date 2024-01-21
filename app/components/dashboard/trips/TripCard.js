@@ -3,6 +3,8 @@ import React, { useState } from "react"
 import DatePicker from "react-datepicker"
 import Modal from "@mui/material/Modal"
 import "react-datepicker/dist/react-datepicker.css"
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import axios from "axios"
 
 export default function TripPage({ trip, userID }) {
@@ -36,11 +38,20 @@ export default function TripPage({ trip, userID }) {
 
   function handleInputChange(event, friendId) {
     data[friendId] = event.target.value;
-  }  
+  }
 
   async function addExpense() {
-    console.log(data);
-    const response = await axios.post("/api/dashboard/trips/addExpense", {tripID, userID, description, startDate, data});
+    try {
+
+      const response = await axios.post("/api/dashboard/trips/addExpense", { tripID, userID, description, startDate, data });
+      toast("Transaction Added");
+      setStartDate(new Date());
+      setDescription(null);
+
+    } catch (err) {
+      console.log("Error adding transaction", err);
+    }
+
   }
 
   calcBalance();
@@ -76,6 +87,8 @@ export default function TripPage({ trip, userID }) {
           <div className="items-center mb-4 mt-4">
             <h1 className="text-2xl font-semibold">{trip.trips.name}</h1>
           </div>
+
+          <ToastContainer />
 
           <div className="mb-4 flex flex-col w-72 sm:w-96 xl:w-80">
             <input
@@ -144,7 +157,7 @@ export default function TripPage({ trip, userID }) {
                 {transactions.map((transaction) => (
                   <div className="flex gap-2">
 
-                    <h2>{transaction?.time.toString().slice(0, 11)}</h2>
+                    <h2>{transaction?.time.toString().slice(0, 10)}</h2>
 
                     <h2>{transaction?.users_trip_transactions_payer_idTousers?.email.slice(0, transaction?.users_trip_transactions_payer_idTousers?.email.lastIndexOf("@"))} ({transaction?.users_trip_transactions_payer_idTousers?.name})</h2>
 

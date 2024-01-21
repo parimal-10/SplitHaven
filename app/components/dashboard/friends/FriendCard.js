@@ -3,7 +3,10 @@ import React, { useState } from "react"
 import { Modal } from "@mui/material"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import axios from "axios"
+import User from "../../user/User"
 
 export default function FriendCard({ userID, friend }) {
   const username = friend.email.slice(0, friend.email.lastIndexOf("@"));
@@ -17,7 +20,7 @@ export default function FriendCard({ userID, friend }) {
     amount: "",
     description: ""
   })
-
+  
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData({
@@ -38,7 +41,11 @@ export default function FriendCard({ userID, friend }) {
     try {
 
       const response = await axios.post("/api/dashboard/friends/addExpense", { formData, startDate, userID, friendID });
-      console.log(response);
+      toast("Transaction Added");
+      setFormData({
+        amount: "",
+        description: ""
+      })
 
     } catch (err) {
       console.log("Error adding expense", err);
@@ -52,18 +59,14 @@ export default function FriendCard({ userID, friend }) {
         onClick={handleOpen}
       >
 
-        <img src={`/avatar-${friend.avatar}.jpg`} className="mr-4 h-8 w-8 rounded-full"></img>
-
-        <h3 className="text-xl font-semibold">
-          {username} ({friend.name})
-        </h3>
+        <User avatar={friend.avatar} email={friend.email} name={friend.name} />
 
         <div className="ml-auto">
           {friend.balance > 0 && (
-            <span className="text-green-600">{`+ ₹${friend.balance}`}</span>
+            <span className="text-green-600">{`+₹${friend.balance}`}</span>
           )}
           {friend.balance < 0 && (
-            <span className="text-red-600">{`- ₹${Math.abs(friend.balance)}`}</span>
+            <span className="text-red-600">{`-₹${Math.abs(friend.balance)}`}</span>
           )}
         </div>
 
@@ -80,6 +83,8 @@ export default function FriendCard({ userID, friend }) {
           <div className="items-center mb-4 mt-4">
             <h1 className="text-2xl font-semibold">{username} ({friend.name})</h1>
           </div>
+
+          <ToastContainer />
 
           {/* Add Expense */}
           <div className="mb-4 flex flex-col w-72 sm:w-96 xl:w-80">
@@ -130,7 +135,7 @@ export default function FriendCard({ userID, friend }) {
               <ul>
                 {transactions.map((transaction) => (
                   <div className="flex gap-2">
-                    <h2>{transaction?.time.toString().slice(0, 11)}</h2>
+                    <h2>{transaction?.time.toString().slice(0, 10)}</h2>
                     <h3>{transaction.description}</h3>
                     {transaction.payer_id === userID && (
                       <span className="text-green-600">{`+ ₹${transaction.amount}`}</span>

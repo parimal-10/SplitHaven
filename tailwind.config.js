@@ -12,7 +12,7 @@ module.exports = {
         neededBlue: "#31304D",
         neededCyan: "#B6BBC4",
         neededLightCyan: "#F0ECE5",
-      },
+      }
     },
   },
   plugins: [],

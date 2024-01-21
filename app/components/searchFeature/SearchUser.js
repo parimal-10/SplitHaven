@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react"
 import SearchUserCard from "./SearchUserCard"
 import axios from "axios"
-import { usePathname, usePathname } from "next/navigation"
+import { usePathname } from "next/navigation"
 
 export default function SearchUser({ userID }) {
     const [searchQuery, setSearchQuery] = useState(null);
@@ -12,28 +12,21 @@ export default function SearchUser({ userID }) {
 
     useEffect(() => {
 
+        if (pathname === "/dashboard/friends") {
+            setLabel({addText: "Add Friend", addedText: "Sent", alreadyText: "Unfriend"});
+        } else if (pathname.startsWith("/dashboard/trips")) {
+            setLabel({addText: "Add", addedText: "Added", alreadyText: "Remove"});
+        }
+
+    }, []);
+
+    useEffect(() => {
+
         if (searchQuery && searchQuery.length > 3) {
-            if (pathname === "/dashboard/friends") {
-                setLabel({addText: "Add Friend", addedText: "Sent"});
-                getUsers(searchQuery);
-            } else if (pathname === "/dashboard/trips") {
-                setLabel({addText: "Add", addedText: "Added"});
-                getFriends(searchQuery);
-            }
+            getUsers(searchQuery);
         }
 
     }, [searchQuery]);
-
-    async function getFriends(searchQuery) {
-        try {
-
-            const response = await axios.post("/api/dashboard/trips/getFriends", {userID, searchQuery});
-            setUsers(response.data);
-
-        } catch (err) {
-            console.log("Error getting friends");
-        }
-    }
 
     async function getUsers(searchQuery) {
         try {
@@ -63,7 +56,7 @@ export default function SearchUser({ userID }) {
                     {users.length > 0 ? (
                         <div>
                             {users.map((user) => (
-                                <SearchUserCard userID={userID} user={user} label={label} />
+                                <SearchUserCard userID={userID} user={user} label={label} pathname={pathname}/>
                             ))}
                         </div>
                     ) : searchQuery && searchQuery.length > 3 ? (

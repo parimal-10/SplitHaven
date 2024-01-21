@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from "react"
 import axios from "axios"
+import User from "../../user/User";
 
 export default function FriendRequestFriendCard({ friend, userID }) {
     const [added, setAdded] = useState(false);
@@ -22,11 +23,7 @@ export default function FriendRequestFriendCard({ friend, userID }) {
             className="p-4 shadow-md rounded-md mt-4 mb-4 flex items-center max-w-sm min-w-fit cursor-pointer"
         >
 
-            <img src={`/avatar-${friend.users_friend_requests_sendTousers.avatar}.jpg`} className="mr-4 h-8 w-8 rounded-full"></img>
-
-            <h3 className="text-xl font-semibold mr-2">
-                {friend.users_friend_requests_sendTousers.email.slice(0, friend.users_friend_requests_sendTousers.email.lastIndexOf("@"))} ({friend.users_friend_requests_sendTousers.name})
-            </h3>
+            <User email={friend.users_friend_requests_sendTousers.email} avatar={friend.users_friend_requests_sendTousers.avatar} name={friend.users_friend_requests_sendTousers.name} />
 
             {added ? (
 
